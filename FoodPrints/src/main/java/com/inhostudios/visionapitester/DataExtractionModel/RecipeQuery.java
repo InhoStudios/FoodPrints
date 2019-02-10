@@ -15,8 +15,10 @@ public class RecipeQuery {
     private String time = "";               // TESTED
     private String exluded = "";            // TESTED
 
-    public RecipeQuery(String oneKeyWord){
-        this.setQ(oneKeyWord);
+    public RecipeQuery(String keywords){
+        String formattedString = keywords.replaceAll(" ", "%20");
+        System.out.println("Search Words: " + formattedString);
+        this.setQ(formattedString);
     }
 
 
@@ -52,6 +54,10 @@ public class RecipeQuery {
 
         String result = "https://api.edamam.com/search?" + q + appID +
                 appKey + from + to + "&health=alcohol-free" + calories + time + exluded + diet;
+
+
+
+
         return result;
     }
 

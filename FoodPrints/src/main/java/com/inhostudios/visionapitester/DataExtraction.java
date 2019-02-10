@@ -94,7 +94,7 @@ public class DataExtraction {
     public static void main(String[] args) {
 
         // --- Format Query, these are possible attributes
-        RecipeQuery query = new RecipeQuery("chocolate%20cheesecake");
+        RecipeQuery query = new RecipeQuery("lemon, cheesecake, cheese");
         query.setCalories(100, 700);
         query.setTime(10, 20);
         query.setDiet(Diet.LOW_CARB.toString());  // //one of “balanced”, “high-protein”, “high-fiber”, “low-fat”, “low-carb”, “low-sodium”
