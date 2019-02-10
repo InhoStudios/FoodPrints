@@ -4,3 +4,5 @@ FoodPrints/\.idea/workspace\.xml
 FoodPrints/\.idea/uiDesigner\.xml
 
 FoodPrints/\.idea/
+
+*.class
