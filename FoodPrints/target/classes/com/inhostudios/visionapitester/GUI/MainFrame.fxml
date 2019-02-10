@@ -61,8 +61,14 @@
     <bottom>
         <HBox BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="statusLabel" text="Status:  " />
-                <Label fx:id="status" />
+                <Label fx:id="statusLabel" text="Status:  ">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+                <Label fx:id="status">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
             </children>
             <padding>
                 <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
@@ -187,17 +193,17 @@
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="526.0" spacing="25.0">
                     <children>
-                        <Button fx:id="initCameraBtn" alignment="CENTER" mnemonicParsing="false" onAction="#initCamera" text="Init Camera" HBox.hgrow="ALWAYS">
+                        <Button fx:id="takePhotoBtn" alignment="CENTER" mnemonicParsing="false" onAction="#takePhotoBtnClicked" text="Take Photo" HBox.hgrow="ALWAYS">
                             <font>
                                 <Font name="Futura Bold" size="24.0" />
                             </font>
                         </Button>
-                  <Button fx:id="SubmitQueryBtnClicked" alignment="CENTER" mnemonicParsing="false" onAction="#SubmitQueryBtnClicked" text="Submit Query">
+                  <Button fx:id="SubmitRequestBtn" alignment="CENTER" mnemonicParsing="false" onAction="#SubmitRequestBtnClicked" text="Submit Request">
                      <font>
                         <Font name="Futura Bold" size="24.0" />
                      </font>
                   </Button>
-                  <Button fx:id="selectRecipeBtn" alignment="CENTER" mnemonicParsing="false" onAction="#selectRecipeBtnClicked" text="Submit Query">
+                  <Button fx:id="selectRecipeBtn" alignment="CENTER" mnemonicParsing="false" onAction="#selectRecipeBtnClicked" text="Select Recipe">
                      <font>
                         <Font name="Futura Bold" size="24.0" />
                      </font>

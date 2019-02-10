@@ -19,7 +19,7 @@ public class ImageInterpreter {
         this.fileName = fileName;
     }
 
-    public void processImage(String fileName) throws Exception{
+    public static void processImage(String fileName) throws Exception{
         // try image recognition
         try (ImageAnnotatorClient vision = ImageAnnotatorClient.create()) {
 
@@ -60,7 +60,7 @@ public class ImageInterpreter {
         }
     }
 
-    public ArrayList<String> getOutputs(String fileName){
+    public static ArrayList<String> getOutputs(String fileName){
         outputs = new ArrayList<>();
         try {
             processImage(fileName);

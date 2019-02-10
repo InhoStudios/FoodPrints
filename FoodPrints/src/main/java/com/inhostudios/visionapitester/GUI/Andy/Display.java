@@ -1,16 +1,23 @@
 package com.inhostudios.visionapitester.GUI.Andy;
 
 import com.inhostudios.visionapitester.Camera.Camera;
+import com.inhostudios.visionapitester.ImageInterpreter;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.concurrent.CountDownLatch;
 
 public class Display extends Application {
@@ -18,16 +25,28 @@ public class Display extends Application {
     public static final CountDownLatch latch = new CountDownLatch(1);
     public static Display displayTest = null;
 
-    @FXML
 
     private JPanel panel1;
-    private List accessList;
+
     private JEditorPane webpageDisplay;
+    private Boolean imageLoaded;
     private JButton webpageButton;
     private JButton recipeButton;
     private JButton camButton;
     private JTextField searchTerms;
+    private java.awt.List accessList;
     private Camera camera;
+    private ListView<String> listView = new ListView<String>();
+    @FXML
+    private BorderPane listPane;
+
+    @FXML
+    private void camButton(ActionEvent event) {
+        ObservableList<String> names = FXCollections.observableArrayList();
+        names.addAll(ImageInterpreter.getOutputs(
+                System.getProperty("user.dir")+ "/src/main/resources/screenshot.jpg"));
+    }
+
 
     public static Display waitForStartUp(){
         try{
@@ -55,9 +74,9 @@ public class Display extends Application {
         new Thread() {
             @Override
             public void run() {
-                Camera cam = new Camera();
-                cam.start();
-                System.out.println(cam.getOutputs().toString());
+                camera = new Camera();
+                camera.start();
+                System.out.println(camera.getOutputs().toString());
 
 
                 Platform.runLater(new Runnable() {
@@ -70,6 +89,7 @@ public class Display extends Application {
         }.start();
     }
 
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Display.fxml"));
@@ -78,6 +98,28 @@ public class Display extends Application {
         accessList.setMultipleMode(true);
         stage.setScene(scene);
         initCamera();
+
+
+        accessList.setMultipleMode(true);
+        accessList.addComponentListener(new ComponentAdapter() {
+        });
+        accessList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int indices[] = accessList.getSelectedIndexes();
+                String srcterms = "";
+                for(int index : indices){
+                    srcterms = srcterms + ", " + accessList.getItem(index);
+                }
+                updateSelection(srcterms);
+
+            }
+
+            public void updateSelection(String str){
+                searchTerms.setText(str);
+            }
+        });
+
 
         stage.show();
     }

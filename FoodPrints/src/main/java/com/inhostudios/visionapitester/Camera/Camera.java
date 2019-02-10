@@ -5,14 +5,14 @@ import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacv.*;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Camera extends JComponent implements Runnable{
@@ -168,14 +168,15 @@ public class Camera extends JComponent implements Runnable{
             // taking a screenshot
             if(action.equals(Keys.CTRLC.toString())){
                 //flash
-                try {
-                    BufferedImage flash = ImageIO.read(new File(System.getProperty("user.dir") + "\\src\\main\\resources\\flash.jpg"));
-                    frame.showImage(flash);
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+//                try {
+////                    BufferedImage flash = ImageIO.read(new File(System.getProperty("user.dir") +
+////                            "\\src\\main\\resources\\flash.jpg"));
+////                    frame.showImage(flash);
+//                } catch (FileNotFoundException e1) {
+//                    e1.printStackTrace();
+//                } catch (IOException e1) {
+//                    e1.printStackTrace();
+//                }
 
                 saveImage(screenshot);
                 ArrayList<String> estimates = interpreter.getOutputs();
