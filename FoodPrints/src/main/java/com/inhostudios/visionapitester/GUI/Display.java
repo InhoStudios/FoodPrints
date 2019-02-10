@@ -4,8 +4,7 @@ import com.inhostudios.visionapitester.Camera.Camera;
 import com.inhostudios.visionapitester.DataExtractionModel.RecipeQuery;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.List;
@@ -18,6 +17,7 @@ public class Display {
     private JButton webpageButton;
     private JButton recipeButton;
     private JButton camButton;
+    private JTextField searchTerms;
     private Camera camera;
 
     public Display(String title, int width, int height) {
@@ -28,6 +28,9 @@ public class Display {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.pack();
+
+        // multiple select for list
+        accessList.setMultipleMode(true);
 
         // create a camera
         camera = new Camera();
@@ -63,6 +66,23 @@ public class Display {
         recipeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            }
+        });
+        accessList.addComponentListener(new ComponentAdapter() {
+        });
+        accessList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int indices[] = accessList.getSelectedIndexes();
+                String srcterms = "";
+                for(int index : indices){
+                    srcterms = srcterms + ", " + accessList.getItem(index);
+                }
+                updateSelection(srcterms);
+            }
+
+            public void updateSelection(String str){
+                searchTerms.setText(str);
             }
         });
     }
