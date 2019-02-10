@@ -4,32 +4,20 @@ import com.inhostudios.visionapitester.Camera.Camera;
 import com.inhostudios.visionapitester.DataExtraction;
 import com.inhostudios.visionapitester.DataExtractionModel.RecipeManager;
 import com.inhostudios.visionapitester.DataExtractionModel.RecipeQuery;
-import com.inhostudios.visionapitester.FoodPrints;
-import com.inhostudios.visionapitester.ImageInterpreter;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-
-import javax.sound.midi.Soundbank;
-import javax.xml.soap.Text;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import static com.inhostudios.visionapitester.FoodPrints.getDir;
 
 public class Controller implements Initializable {
 
