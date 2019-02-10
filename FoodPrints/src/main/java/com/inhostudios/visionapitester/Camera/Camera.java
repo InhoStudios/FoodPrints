@@ -121,6 +121,10 @@ public class Camera extends JComponent implements Runnable{
         running = false;
     }
 
+    public ArrayList<String> getOutputs(){
+        return interpreter.getOutputs();
+    }
+
     // conversion helper for ipl images to byte arrays
     public static BufferedImage IplImageToByteArray(opencv_core.IplImage src) {
         OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
@@ -173,7 +177,7 @@ public class Camera extends JComponent implements Runnable{
 enum Keys
 {
     ESCAPE("Escape", KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0)),
-    CTRLC("Control-C", KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK)),
+    CTRLC("Control-C", KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK)),
     UP("Up", KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0)),
     DOWN("Down", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0)),
     LEFT("Left", KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0)),
