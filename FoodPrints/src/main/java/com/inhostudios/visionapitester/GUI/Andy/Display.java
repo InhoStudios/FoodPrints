@@ -1,6 +1,7 @@
 package com.inhostudios.visionapitester.GUI.Andy;
 
 import com.inhostudios.visionapitester.Camera.Camera;
+import com.inhostudios.visionapitester.DataExtractionModel.Recipe;
 import com.inhostudios.visionapitester.ImageInterpreter;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -12,6 +13,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -27,6 +30,7 @@ public class Display extends Application {
 
 
     private JPanel panel1;
+    private WebEngine engine;
 
     private JEditorPane webpageDisplay;
     private Boolean imageLoaded;
@@ -36,17 +40,23 @@ public class Display extends Application {
     private JTextField searchTerms;
     private java.awt.List accessList;
     private Camera camera;
+    private Recipe selectedRecipe;
+    private String url;
+    @FXML
+    private WebView webView;
+    @FXML
     private ListView<String> listView = new ListView<String>();
+    private ObservableList<String> names = FXCollections.observableArrayList();
     @FXML
     private BorderPane listPane;
 
+
+
     @FXML
     private void camButton(ActionEvent event) {
-        ObservableList<String> names = FXCollections.observableArrayList();
-        names.addAll(ImageInterpreter.getOutputs(
+        listView.getItems().addAll(ImageInterpreter.getOutputs(
                 System.getProperty("user.dir")+ "/src/main/resources/screenshot.jpg"));
     }
-
 
     public static Display waitForStartUp(){
         try{
@@ -66,8 +76,16 @@ public class Display extends Application {
         setDisplayTest(this);
     }
 
-    public void printSomething() {
-        System.out.println("You called a method on the application");
+    @FXML
+    public void select() {//TODO: fix this pls
+        selectedRecipe = (Recipe) listView.getSelectionModel().getSelectedItem();
+
+        if (selectedRecipe != null) {
+            url = selectedRecipe.getUrlToRecipe();
+            System.out.println("You have selected this Recipe: " + selectedRecipe.toString());
+            return;
+        }
+        System.out.println("ERROR You have not chosen a Recipe");
     }
 
     public void initCamera() {
@@ -114,13 +132,20 @@ public class Display extends Application {
                 updateSelection(srcterms);
 
             }
-
             public void updateSelection(String str){
                 searchTerms.setText(str);
             }
         });
 
-
+//        webView = new WebView();
+//        engine = webView.getEngine();
+//        engine.load("https://www.google.com/");
+//        if (url == null) {
+//            url = "https://www.google.com";
+//        }
+//        System.out.println(selectedRecipe.getUrlToRecipe());
+//        WebEngine webEngine = webView.getEngine();
+//        webEngine.load(url);
         stage.show();
     }
 
