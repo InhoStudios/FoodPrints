@@ -8,9 +8,9 @@ public class FoodItem {
 
     private String name;
     private Nutrition nutrition;
-    private HashMap<String, Recipe> recipes = new HashMap<>();
+    private HashMap<String, Recipes> recipes = new HashMap<>();
 
-    public FoodItem() {
-
+    public FoodItem(String name) {
+        this.name = name;
     }
 }
