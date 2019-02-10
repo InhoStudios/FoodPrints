@@ -8,15 +8,14 @@ import com.inhostudios.visionapitester.DataExtractionModel.Recipe;
 import java.util.ArrayList;
 
 public class FoodPrints {
-
     public static void main(String[] args){
-        String path = getDir() +"recipes.json";
-        JsonArray jobj = Recipe.readFromJsonFile(path);
-        print(jobj.toString());
-        print(Recipe.getJsonObjectAsString(jobj));
+//        String path = getDir() +"recipes.json";
+//        JsonArray jobj = Recipe.readFromJsonFile(path);
+//        print(jobj.toString());
+//        print(Recipe.getJsonObjectAsString(jobj));
         // camera
-//        Camera cam = new Camera();
-//        cam.start();
+        Camera cam = new Camera();
+        cam.start();
         // no more camera
     }
 

@@ -5,7 +5,7 @@ public class RecipeQuery {
     private String recipeAppID = "&app_id=ab5047e9";
     private String recipeAppKey = "&app_key=391d21268595ea4650e3d0f9039af88f";
 
-    private String q; // query text
+    private String q;                       // query text
     private String appID = recipeAppID;     // TESTED
     private String appKey = recipeAppKey;   // TESTED
     private String from = "&from=0";        // TESTED
