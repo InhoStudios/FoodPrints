@@ -1,24 +1,59 @@
 package com.inhostudios.visionapitester.DataExtractionModel;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.inhostudios.visionapitester.DataExtraction;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class Recipe {
-    private static String calories;
-    private String fat;
-    private String protein;
-    private String carbs;
-    private String fibre;
-    private String directions;
-    private String cooktime;
+    private double calories;
+    private double fat;
+    private double protein;
+    private double carbs;
+    private double fibre;
+    private String directions; // unused
+    private int cooktime;
     private String urlToRecipe;
     private int servings;
+
+    public Recipe(Object jsonObj){
+        String jsonString = jsonObj.toString();
+        JsonParser parser = new JsonParser();
+        JsonObject jobj = parser.parse(jsonString).getAsJsonObject();
+        JsonObject recipe = jobj.getAsJsonObject("recipe");
+        // calories
+        JsonPrimitive CALORIES = recipe.getAsJsonPrimitive("calories");
+
+        JsonObject nutrients = recipe.getAsJsonObject("totalNutrients");
+        // fat
+        JsonPrimitive FAT = nutrients.getAsJsonObject("FAT").getAsJsonPrimitive("quantity");
+        // protein
+        JsonPrimitive PROTEIN = nutrients.getAsJsonObject("PROCNT").getAsJsonPrimitive("quantity");
+        // carbs
+        JsonPrimitive CARBS = nutrients.getAsJsonObject("CHOCDF").getAsJsonPrimitive("quantity");
+        // fibre
+        JsonPrimitive FIBRE = nutrients.getAsJsonObject("FIBTG").getAsJsonPrimitive("quantity");
+        // cooktime
+        JsonPrimitive COOKTIME = recipe.getAsJsonPrimitive("totalTime");
+        // urlToRecipe
+        JsonPrimitive URL = recipe.getAsJsonPrimitive("url");
+        // servings
+        JsonPrimitive SERVINGS = recipe.getAsJsonPrimitive("yield");
+
+        calories = CALORIES.getAsDouble();
+        fat = FAT.getAsDouble();
+        protein = PROTEIN.getAsDouble();
+        carbs = CARBS.getAsDouble();
+        fibre = FIBRE.getAsDouble();
+        cooktime = COOKTIME.getAsInt();
+        urlToRecipe = URL.getAsString();
+        servings = SERVINGS.getAsInt();
+
+        System.out.println("Calories: " + calories + " Fat: " + fat + " URL: " + urlToRecipe);
+
+    }
 
     // needs fixes but keep it for now
     public static JsonArray readFromJsonFile(String path){
@@ -37,27 +72,29 @@ public class Recipe {
         return jobj;
     }
 
-    public static void setData(String queryStr, int minCal, int maxCal, int minTime, int maxTime){
-        // --- Format Query, these are possible attributes
-        RecipeQuery query = new RecipeQuery(queryStr);
-        query.setCalories(minCal, maxCal);
-        query.setTime(minTime, maxTime);
-        query.setDiet(Diet.LOW_CARB.toString());  // //one of “balanced”, “high-protein”, “high-fiber”, “low-fat”, “low-carb”, “low-sodium”
-        String url = query.toURL(); // output query to url string
-
-        // --- HTTP REQUEST
-        DataExtraction dataExtraction = new DataExtraction();
-        ArrayList<Object> list = dataExtraction.getEdamamRecipes(url);
-
-        String jsonString = "{\"recdata\":" + list.toString() + "};";
-        System.out.println("\nJson Got! \n");
-        JsonElement jElement = new JsonParser().parse(jsonString);
-        JsonObject jobj = jElement.getAsJsonObject();
-
-        // assigning values from the json object
-        calories = jobj.getAsJsonObject("recipe").get("calories").toString();
-        System.out.println(calories);
-    }
+    // don't need this shit anymore vvvvvv
+//    public static void setData(String queryStr, int minCal, int maxCal, int minTime, int maxTime){
+//        // --- Format Query, these are possible attributes
+//        RecipeQuery query = new RecipeQuery(queryStr);
+//        query.setCalories(minCal, maxCal);
+//        query.setTime(minTime, maxTime);
+//        query.setDiet(Diet.LOW_CARB.toString());  // //one of “balanced”, “high-protein”, “high-fiber”, “low-fat”, “low-carb”, “low-sodium”
+//        String url = query.toURL(); // output query to url string
+//
+//        // --- HTTP REQUEST
+//        DataExtraction dataExtraction = new DataExtraction();
+//        ArrayList<Object> list = dataExtraction.getEdamamRecipes(url);
+//
+//        String jsonString = list.get(0).toString();
+//        System.out.println(jsonString);
+//        JsonParser parser = new JsonParser();
+//        JsonObject jobj = parser.parse(jsonString).getAsJsonObject();
+//        JsonObject recipe = jobj.getAsJsonObject("recipe");
+//        JsonPrimitive cals = recipe.getAsJsonPrimitive("calories");
+//
+//        System.out.println(cals.getAsInt());
+//
+//    }
 
 
 
