@@ -16,10 +16,7 @@ public class RecipeManager {
     diettype (which is an enumerator)
      */
     public RecipeManager(List<Object> recipeJsons){
-        for(Object obj : recipeJsons){
-            recipeList.add(new Recipe(obj));
-        }
-        recipeList = filter(recipeList);
+        refreshRecipes(recipeJsons);
     }
 
     public ArrayList<Recipe> filter(ArrayList<Recipe> toFilter){
@@ -32,6 +29,13 @@ public class RecipeManager {
              */
         }
         return temp;
+    }
+
+    public void refreshRecipes(List<Object> recipeJsons){
+        for(Object obj : recipeJsons){
+            recipeList.add(new Recipe(obj));
+        }
+        recipeList = filter(recipeList);
     }
 
     public ArrayList<Recipe> getRecipeList(){
