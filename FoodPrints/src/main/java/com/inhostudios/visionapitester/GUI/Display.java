@@ -1,6 +1,7 @@
 package com.inhostudios.visionapitester.GUI;
 
 import com.inhostudios.visionapitester.Camera.Camera;
+import com.inhostudios.visionapitester.DataExtractionModel.RecipeQuery;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -57,6 +58,11 @@ public class Display {
                 for(String hit : potentials){
                     accessList.add(hit);
                 }
+            }
+        });
+        recipeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
             }
         });
     }

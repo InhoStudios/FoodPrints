@@ -43,7 +43,7 @@ public class Recipe {
         // servings
         JsonPrimitive SERVINGS = recipe.getAsJsonPrimitive("yield");
         // diet labels
-        JsonPrimitive DIETLABELS = recipe.getAsJsonPrimitive("dietLabels");
+        JsonPrimitive DIETLABELS = recipe.getAsJsonArray("dietLabels").getAsJsonPrimitive();
 
         calories = CALORIES.getAsDouble();
         fat = FAT.getAsDouble();
