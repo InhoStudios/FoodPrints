@@ -3,11 +3,15 @@ package com.inhostudios.visionapitester.DataExtractionModel;
 import com.google.gson.*;
 import com.inhostudios.visionapitester.DataExtraction;
 
+import java.awt.*;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Recipe {
+    private String label;
     private double calories;
     private double fat;
     private double protein;
@@ -17,13 +21,17 @@ public class Recipe {
     private int cooktime;
     private String urlToRecipe;
     private int servings;
-    private String[] dietLabels;
+    private ArrayList<String> dietLabels = new ArrayList<String>();
 
     public Recipe(Object jsonObj){
         String jsonString = jsonObj.toString();
         JsonParser parser = new JsonParser();
         JsonObject jobj = parser.parse(jsonString).getAsJsonObject();
         JsonObject recipe = jobj.getAsJsonObject("recipe");
+
+        // label
+        JsonPrimitive LABEL = recipe.getAsJsonPrimitive("label");
+
         // calories
         JsonPrimitive CALORIES = recipe.getAsJsonPrimitive("calories");
 
@@ -45,6 +53,7 @@ public class Recipe {
         // diet labels
         JsonArray DIETLABELS = recipe.getAsJsonArray("dietLabels");
 
+        label = LABEL.getAsString();
         calories = CALORIES.getAsDouble();
         fat = FAT.getAsDouble();
         protein = PROTEIN.getAsDouble();
@@ -53,11 +62,10 @@ public class Recipe {
         cooktime = COOKTIME.getAsInt();
         urlToRecipe = URL.getAsString();
         servings = SERVINGS.getAsInt();
-        for(int i = 0; i < DIETLABELS.size(); i++){
-            dietLabels[i] = DIETLABELS.get(i).getAsString();
-        }
 
-        System.out.println("Calories: " + calories + " Fat: " + fat + " URL: " + urlToRecipe);
+        for(int i = 0; i < DIETLABELS.size(); i++){
+            dietLabels.add(DIETLABELS.get(i).getAsString());
+        }
 
     }
 
@@ -102,16 +110,10 @@ public class Recipe {
 //
 //    }
 
-
-
     public static String getJsonObjectAsString(JsonArray jsonObject){
         return jsonObject.toString();
     }
 
-    // TODO: take a list of json objects and return a list of Recipe Object
-    public Recipe[] extractListOfRecipe(Object[] objects){
-        return null; // stub
-    }
 
     // get all the attributes
 
@@ -152,7 +154,20 @@ public class Recipe {
         return servings;
     }
 
-    public String[] getDietLabels(){
+    public ArrayList<String> getDietLabels(){
         return dietLabels;
+    }
+
+    public String toString() {
+        return label;
+    }
+
+    public static void main(String[] args) {
+        DataExtraction extracter = new DataExtraction();
+        RecipeQuery query = new RecipeQuery("chicken");
+        List<Object> objArray = extracter.getEdamamRecipes(query.toURL());
+
+        Recipe recipe = new Recipe(objArray.get(0));
+        System.out.println("Here are the list " + recipe.toString());
     }
 }
