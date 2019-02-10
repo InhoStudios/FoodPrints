@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -53,7 +54,7 @@ public class Controller implements Initializable {
     private CheckBox excludedItemBox;
 
 
-    private RecipeQuery query;
+    private RecipeQuery query = new RecipeQuery("");
     private Recipe selectedRecipe;
     private String url;
     private Camera cam;
@@ -63,6 +64,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initCamera();
+        status.setText("Initialized Camera. Press take Photo to capture Vocabulary");
 
 
         // DUMMY LIST, Populating List of Recgonized Food
@@ -70,36 +72,63 @@ public class Controller implements Initializable {
         dummyListFiller.add("fish");
         dummyListFiller.add("tomato");
         dummyListFiller.add("pasta");
-        dummyListFiller.add("coke");
+        dummyListFiller.add("thymes");
 
 
         searchListView.getItems().addAll(dummyListFiller);
         searchListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //allow list to select multiple songs
 
-        status.setText("Initialized Camera. Press take Photo to capture Vocabulary");
 
 
-//        //allow searchTextField to update searchListView result
-//        keyWordsSearchkeyWordsSearch.textProperty().addListener((v, oldValue, newValue) -> {
-//            System.out.println(newValue);
-//            handleSearchOnListView(oldValue, newValue);
-//        });
-//
-//        dietRistrTextbox.textProperty().addListener((v, oldValue, newValue) -> {
-//            System.out.println(newValue);
-//        });
-//
-//        caloriesTextbox.textProperty().addListener((v, oldValue, newValue) -> {
-//            System.out.println(newValue);
-//        });
-//
-//        cookingTimeTextBox.textProperty().addListener((v, oldValue, newValue) -> {
-//            System.out.println(newValue);
-//        });
-//
-//        excludedItemTextBox.textProperty().addListener((v, oldValue, newValue) -> {
-//            System.out.println(newValue);
-//        });
+        keyWordsSearchkeyWordsSearch.textProperty().addListener((v, oldValue, newValue) -> {
+            if (keyWordsBox.isSelected()){
+                query.setQ(newValue);
+            }
+        });
+
+        dietRistrTextbox.textProperty().addListener((v, oldValue, newValue) -> {
+            if (dietRistrBox.isSelected()){
+                query.setDiet(newValue);
+            } else {
+                query.setDiet("");
+            }
+
+        });
+
+        caloriesTextbox.textProperty().addListener((v, oldValue, newValue) -> {
+            if (caloriesBox.isSelected()){
+                String[] result = newValue.split(", ");
+
+                query.setCalories(Integer.parseInt(result[0]), Integer.parseInt(result[1]));
+            } else {
+                query.setCalories(0, 1000000);
+            }
+        });
+
+        cookingTimeTextBox.textProperty().addListener((v, oldValue, newValue) -> {
+            if (cookingTimeBox.isSelected()){
+                if (!newValue.contains(",")){
+                    int result = Integer.parseInt(newValue);
+                    query.setTime(result);
+                } else {
+                    String[] temp = newValue.split(", ");
+                    int result1 = Integer.parseInt(temp[0]);
+                    int result2 = Integer.parseInt(temp[1]);
+                    query.setTime(result1, result2);
+                }
+            } else {
+                query.setTime(0, 10000000);
+            }
+
+        });
+
+        excludedItemTextBox.textProperty().addListener((v, oldValue, newValue) -> {
+            if (excludedItemBox.isSelected()){
+                query.setExcluded(newValue);
+            } else {
+                query.setExcluded("");
+            }
+        });
 
     }
 
@@ -135,7 +164,6 @@ public class Controller implements Initializable {
         status.setText("Submitting Query Right Now");
 
         String cameraKeyWords = "";
-        query = new RecipeQuery("");
         List<Object> selectedItemFromSearchListView = searchListView.getSelectionModel().getSelectedItems();
         if (!selectedItemFromSearchListView.isEmpty()) {
             for (Object obj : selectedItemFromSearchListView) {
@@ -145,6 +173,7 @@ public class Controller implements Initializable {
             }
             query.setQ(cameraKeyWords);
         }
+
 
         DataExtraction extracter = new DataExtraction();
         List<Object> recipeJsons = extracter.getEdamamRecipes(query.toURL());
@@ -160,9 +189,6 @@ public class Controller implements Initializable {
         // Re-populate the list with recipes
         searchListView.getItems().addAll(availableRecipes);
         searchListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //allow list to select multiple songs
-
-
-//        handleOptions(keyWordsBox, dietRistrBox, caloriesBox, cookingTimeBox, excludedItemBox);
     }
 
     public void selectRecipeBtnClicked() {
@@ -194,41 +220,10 @@ public class Controller implements Initializable {
         window.close();
     }
 
-    //add filters on database base on the selected choiceBox
-    private void handleOptions(CheckBox keyWordsBox, CheckBox dietRistrBox, CheckBox caloriesBox, CheckBox cookingTimeBox, CheckBox excludedItemBox) {
-//        recipeManager.filter(dataBase, favoriteBox.isSelected(), hateBox.isSelected(),
-//                recentlyPlayedBox.isSelected(), lostSongBox.isSelected(), neverPlayedBox.isSelected(), allSongsBox.isSelected());
-    }
-
 
     //save the database before exiting
     //being called in Main class
     public void exitProcedure() {
         // TODO, do something before closing the program.
-    }
-
-    private void handleSearchOnListView(String oldValue, String newValue) {
-        // If the number of characters in the text box is less than last time it must be because the user pressed delete
-        if (oldValue != null && (newValue.length() < oldValue.length())) {
-            // Restore the lists original set of entries and start from the beginning
-            ObservableList<Object> entries = FXCollections.observableArrayList();
-//            for (Object obj : recipeManger.getListOfSongs()) {
-//                entries.add(obj);
-//            }
-            searchListView.setItems(entries);
-        }
-
-        // Change to upper case so that case is not an issue
-        newValue = newValue.toUpperCase();
-
-        // Filter out the entries that don't contain the entered text
-        ObservableList<Object> subentries = FXCollections.observableArrayList();
-        for (Object entry : searchListView.getItems()) {
-            String entryText = entry.toString();
-            if (entryText.toUpperCase().contains(newValue)) {
-                subentries.add(entry);
-            }
-        }
-        searchListView.setItems(subentries);
     }
 }
