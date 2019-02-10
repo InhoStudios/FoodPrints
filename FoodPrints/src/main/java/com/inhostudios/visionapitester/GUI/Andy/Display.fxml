@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.inhostudios.visionapitester.GUI.Andy.Display" prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inhostudios.visionapitester.GUI.Andy.Display">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="51.0" layoutX="-15.0" stroke="WHITE" strokeType="INSIDE" width="630.0">
+         <fill>
+            <LinearGradient endX="1.0" endY="0.8894230769230769">
+               <stops>
+                  <Stop color="BLACK" />
+                  <Stop color="#b187ff" offset="0.007434944237918215" />
+                  <Stop color="#34f8f84f" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
+      <Text fill="WHITE" fontSmoothingType="LCD" layoutX="26.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Foodprints" wrappingWidth="193.50341796875">
+         <font>
+            <Font name="Futura Medium" size="18.0" />
+         </font></Text>
+       <Label id="labelwithimage" layoutX="123.0" layoutY="4.0" prefHeight="43.0" prefWidth="49.0" style="-fx-graphic:url('footprintslogo.png'); -fx-graphic-text-gap : 10;" />
+   </children>
+   <effect>
+      <Glow />
+   </effect>
 </AnchorPane>
