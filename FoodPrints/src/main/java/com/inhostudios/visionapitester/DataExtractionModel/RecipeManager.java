@@ -19,6 +19,7 @@ public class RecipeManager {
         for(Object obj : recipeJsons){
             recipeList.add(new Recipe(obj));
         }
+        recipeList = filter(recipeList);
     }
 
     public ArrayList<Recipe> filter(ArrayList<Recipe> toFilter){
