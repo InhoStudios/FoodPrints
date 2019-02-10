@@ -14,25 +14,32 @@ public class Camera extends JComponent implements Runnable{
 
     private static final long serialVersionUID = 1L;
 
+    // initializing starter variables
     private static CanvasFrame frame = new CanvasFrame("Webcam");
     private static boolean running = false;
     private static int frameWidth = 1280;
     private static int frameHeight = 720;
+
+    // image grabbing object from open CV api
     private static OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
     private static BufferedImage bufImg;
 
     public Camera(){
+        // setting camera size
         frame.setSize(frameWidth, frameHeight);
 
+        // map for keyboard inputs
         ActionMap actionMap = frame.getRootPane().getActionMap();
         InputMap inputMap = frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 
+        // adding key inputs to key maps
         for (Keys direction : Keys.values())
         {
             actionMap.put(direction.getText(), new KeyBinding(direction.getText()));
             inputMap.put(direction.getKeyStroke(), direction.getText());
         }
 
+        // adding key listeners to the frame
         frame.getRootPane().setActionMap(actionMap);
         frame.getRootPane().setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
 
@@ -47,46 +54,59 @@ public class Camera extends JComponent implements Runnable{
         });
     }
 
+    // run method
     public void run(){
+        // starting the thread for the frame grabbing object
         try {
             grabber.start();
         } catch (FrameGrabber.Exception e) {
             e.printStackTrace();
         }
+        // while running loop
         while(running){
+            // grabbing the image from the frame
             try{
                 grabber.setImageWidth(frameWidth);
                 grabber.setImageHeight(frameHeight);
-                    final Frame cvimg = grabber.grab();
-                    OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
-                    opencv_core.IplImage img = converter.convert(cvimg);
-                    if(cvimg != null){
-                        frame.showImage(converter.convert(img));
-
+                // grabbing image from the screen into a frame object
+                Frame cvimg = grabber.grab();
+                //converting it to the ipl image fileformat
+                OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
+                opencv_core.IplImage img = converter.convert(cvimg);
+                //showing it on the screen if the image exists
+                // error might be happening here? if the image doesn't exist it might not show image, break, pass through and end the thread
+                if(cvimg != null){
+                    frame.showImage(converter.convert(img));
                 }
             } catch(Exception e){
                 e.printStackTrace();
             }
         }
+        // ending the grabber thread
         try {
             grabber.stop();
             grabber.release();
         } catch (FrameGrabber.Exception e) {
             e.printStackTrace();
         }
+        // ending the frame thread
         frame.dispose();
     }
+
+    // starting the thread
     public void start()
     {
         new Thread(this).start();
         running = true;
     }
 
+    // stopping the thread running boolean
     public void stop()
     {
         running = false;
     }
 
+    // key binding object for key mapping
     private class KeyBinding extends AbstractAction {
 
         private static final long serialVersionUID = 1L;
@@ -107,6 +127,7 @@ public class Camera extends JComponent implements Runnable{
     }
 }
 
+// honestly i don't know exactly how this works but it shouldn't be the reason it stops working
 enum Keys
 {
     ESCAPE("Escape", KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0)),
