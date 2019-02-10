@@ -3,18 +3,14 @@ package GUI;
 import com.inhostudios.visionapitester.Camera.Camera;
 import com.inhostudios.visionapitester.FoodPrints;
 import com.inhostudios.visionapitester.ImageInterpreter;
-import exceptions.EmptyPlaylistException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import model.MusicPlayer.MusicPlayer;
-import model.Playlist;
-import model.PlaylistManager;
-import model.Song;
-import org.omg.CORBA.Any;
+
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -78,7 +74,9 @@ public class Controller implements Initializable {
         Camera cam = new Camera();
         cam.start();
 
-        ArrayList<String> guessedNames = cam.getOutput();
+//        ArrayList<String> guessedNames = cam.getOutput();
+        ArrayList<String> guessedNames = new ArrayList<>();
+        guessedNames.add("D");
 
 
         searchListView.getItems().addAll(guessedNames);
@@ -101,27 +99,27 @@ public class Controller implements Initializable {
     }
 
     public void playButtonClick() {
-        musicPlayer.setPlaylist(currentQueue);
-
-        status.setText("Play Button Clicked.");
-
-        if (musicPlayer.getPlaylist().getListOfSongs().isEmpty()) {
-            status.setText("Current Queue is empty. Please select check box and hit submit button!");
-            return;
-        }
-
-
-        if (!musicPlayerInitialized) {
-            musicPlayer.initializeThreadAndPlay();
-            musicPlayerInitialized = true;
-        } else {
-            musicPlayer.resume();
-        }
+//        musicPlayer.setPlaylist(currentQueue);
+//
+//        status.setText("Play Button Clicked.");
+//
+//        if (musicPlayer.getPlaylist().getListOfSongs().isEmpty()) {
+//            status.setText("Current Queue is empty. Please select check box and hit submit button!");
+//            return;
+//        }
+//
+//
+//        if (!musicPlayerInitialized) {
+//            musicPlayer.initializeThreadAndPlay();
+//            musicPlayerInitialized = true;
+//        } else {
+//            musicPlayer.resume();
+//        }
     }
 
     public void pauseButtonClick() {
         status.setText("Pause Button Clicked.");
-        musicPlayer.pause();
+//        musicPlayer.pause();
     }
 
     public void skipButtonClick() {
@@ -137,11 +135,11 @@ public class Controller implements Initializable {
     public void submitButtonClick() {
         status.setText("New Selections Made...");
 
-        List<Any> selectedItemFromSearchListView = searchListView.getSelectionModel().getSelectedItems();
+        List<Object> selectedItemFromSearchListView = searchListView.getSelectionModel().getSelectedItems();
         if (!selectedItemFromSearchListView.isEmpty()) {
             //clearing out the current queue
 
-            for (Any any : selectedItemFromSearchListView) {
+            for (Object any : selectedItemFromSearchListView) {
                 // do something to the list item
             }
 
