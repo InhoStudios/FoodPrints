@@ -11,9 +11,6 @@ public class FoodPrints {
         String path = System.getProperty("user.dir") + "\\src\\main\\resources\\apple.jpg";
 
         // camera
-        Camera camera = new Camera();
-        Thread cTh = new Thread(camera);
-        cTh.start();
         // no more camera
 
         ImageInterpreter imageInterpreter = new ImageInterpreter(path);
