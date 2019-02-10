@@ -12,8 +12,10 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 
+import javax.xml.soap.Text;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -29,37 +31,12 @@ public class Controller implements Initializable {
 
     @FXML
     private MenuBar menuBar;
+
     @FXML
-    private MenuItem menuFileClose;
+    private TextField keyWordsSearchkeyWordsSearch;
 
     @FXML
     private ListView<Object> searchListView = new ListView<Object>();
-    @FXML
-    private TextField searchTextField;
-
-    @FXML
-    private CheckBox favoriteBox;
-    @FXML
-    private CheckBox hateBox;
-    @FXML
-    private CheckBox recentlyPlayedBox;
-    @FXML
-    private CheckBox lostSongBox;
-    @FXML
-    private CheckBox neverPlayedBox;
-    @FXML
-    private CheckBox allSongsBox;
-    @FXML
-    private Button submitButton;
-
-    @FXML
-    private Button button;
-    @FXML
-    private Button pauseButton;
-    @FXML
-    private Button skipButton;
-    @FXML
-    private Button stopButton;
 
     @FXML
     private Label status;
@@ -68,27 +45,35 @@ public class Controller implements Initializable {
     //this is where you run your initialization when the window first open
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        // DUMMY LIST
+        ArrayList<String> guessedNames = new ArrayList<>();
+        guessedNames.add("fish");
+        guessedNames.add("tomato");
+
+
+        searchListView.getItems().addAll(guessedNames);
+        searchListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //allow list to select multiple songs
+        //initializing status bar
+        status.setText("Initialized");
+
+
+//        //allow searchTextField to update searchListView result
+        keyWordsSearchkeyWordsSearch.textProperty().addListener((v, oldValue, newValue) -> {
+            System.out.println("Clicked!");
+            handleSearchOnListView(oldValue, newValue);
+        });
+    }
+
+    // TODO: notworking!
+    public void initCamera(){
         //initializing Camera
 
-//        ImageInterpreter interpreter = new ImageInterpreter(FoodPrints.getDir()+ "screenshot.jpg");
-//        Camera cam = new Camera();
-//        cam.start();
+        ImageInterpreter interpreter = new ImageInterpreter(FoodPrints.getDir()+ "screenshot.jpg");
+        Camera cam = new Camera();
+        cam.start();
 
-//        ArrayList<String> guessedNames = cam.getOutput();
-//        ArrayList<String> guessedNames = new ArrayList<>();
-//        guessedNames.add("D");
-//
-//
-//        searchListView.getItems().addAll(guessedNames);
-//        searchListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //allow list to select multiple songs
-//        //initializing status bar
-//        status.setText("Starting the Camera");
-//
-//
-//        //allow searchTextField to update searchListView result
-//        searchTextField.textProperty().addListener((v, oldValue, newValue) -> {
-//            handleSearchOnListView(oldValue, newValue);
-//        });
+        System.out.println(cam.getOutputs().toString());
     }
 
     public void menuFileCloseClick() {
@@ -146,7 +131,7 @@ public class Controller implements Initializable {
             return;
         }
 
-        handleOptions(favoriteBox, hateBox, recentlyPlayedBox, lostSongBox, neverPlayedBox, allSongsBox);
+//        handleOptions(favoriteBox, hateBox, recentlyPlayedBox, lostSongBox, neverPlayedBox, allSongsBox);
     }
 
     //add filters on database base on the selected choiceBox

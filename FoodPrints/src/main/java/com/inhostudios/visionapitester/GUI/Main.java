@@ -1,7 +1,6 @@
 package com.inhostudios.visionapitester.GUI;
 
-import com.inhostudios.visionapitester.Camera.Camera;
-import com.inhostudios.visionapitester.ImageInterpreter;
+
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,15 +48,6 @@ public class Main extends Application {
             controller.exitProcedure();
             window.close();
         });
-
-
-        // TODO: How i may be using the camera obkect
-//        ImageInterpreter interpreter = new ImageInterpreter(getDir()+"screenshot.jpg");
-//        Camera cam = new Camera();
-//        cam.start();
-//
-//        arrayString = cam.getIneterpreter.getOutput(0);
-
     }
 
     public static void main(String[] args) {

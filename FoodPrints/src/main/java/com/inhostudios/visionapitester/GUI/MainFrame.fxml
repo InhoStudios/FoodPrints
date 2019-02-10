@@ -187,11 +187,16 @@
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="526.0" spacing="25.0">
                     <children>
-                        <Button fx:id="SubmitQueryBtn" alignment="CENTER" mnemonicParsing="false" onAction="#playButtonClick" text="Submit Query" HBox.hgrow="ALWAYS">
+                        <Button fx:id="initCameraBtn" alignment="CENTER" mnemonicParsing="false" onAction="#initCamera" text="Init Camera" HBox.hgrow="ALWAYS">
                             <font>
                                 <Font name="Futura Bold" size="24.0" />
                             </font>
                         </Button>
+                  <Button fx:id="SubmitQueryBtn" alignment="CENTER" mnemonicParsing="false" onAction="#playButtonClick" text="Submit Query">
+                     <font>
+                        <Font name="Futura Bold" size="24.0" />
+                     </font>
+                  </Button>
                         <Button fx:id="OpenWebpageBtn" alignment="CENTER" mnemonicParsing="false" onAction="#playButtonClick" text="Open Webpage">
                             <font>
                                 <Font name="Futura Bold" size="24.0" />
