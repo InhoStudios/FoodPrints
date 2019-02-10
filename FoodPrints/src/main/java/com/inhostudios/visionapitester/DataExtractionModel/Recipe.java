@@ -107,4 +107,42 @@ public class Recipe {
         return null; // stub
     }
 
+    // get all the attributes
+
+
+    public double getCalories() {
+        return calories;
+    }
+
+    public double getFat() {
+        return fat;
+    }
+
+    public double getProtein() {
+        return protein;
+    }
+
+    public double getCarbs() {
+        return carbs;
+    }
+
+    public double getFibre() {
+        return fibre;
+    }
+
+    public String getDirections() {
+        return directions;
+    }
+
+    public int getCooktime() {
+        return cooktime;
+    }
+
+    public String getUrlToRecipe() {
+        return urlToRecipe;
+    }
+
+    public int getServings() {
+        return servings;
+    }
 }

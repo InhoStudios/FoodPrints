@@ -5,10 +5,36 @@ import java.util.List;
 
 public class RecipeManager {
 
-    private List<Object> recipes;
+    private ArrayList<Recipe> recipeList;
 
-    public RecipeManager(List<Object> recipes){
-        this.recipes = recipes;
+    // need to pass through filter variables to the recipe manager in the constructor
+    /*
+    mincals
+    maxcals
+    mintime
+    maxtime
+    diettype (which is an enumerator)
+     */
+    public RecipeManager(List<Object> recipeJsons){
+        for(Object obj : recipeJsons){
+            recipeList.add(new Recipe(obj));
+        }
+    }
+
+    public ArrayList<Recipe> filter(ArrayList<Recipe> toFilter){
+        ArrayList<Recipe> temp = new ArrayList<>();
+        for(Recipe recipe : toFilter){
+            //filter each individual variable
+            /*
+            eg. if(recipe.getCalories() > minCals && recipe.getCalories < maxCals) temp.add(recipe);
+            but do this for each attribute and idk how i would do diettype
+             */
+        }
+        return temp;
+    }
+
+    public ArrayList<Recipe> getRecipeList(){
+        return recipeList;
     }
 
 }
