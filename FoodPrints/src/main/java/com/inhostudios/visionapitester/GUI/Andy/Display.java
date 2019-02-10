@@ -1,7 +1,10 @@
 package com.inhostudios.visionapitester.GUI.Andy;
 
 import com.inhostudios.visionapitester.Camera.Camera;
+import com.inhostudios.visionapitester.DataExtraction;
 import com.inhostudios.visionapitester.DataExtractionModel.Recipe;
+import com.inhostudios.visionapitester.DataExtractionModel.RecipeManager;
+import com.inhostudios.visionapitester.DataExtractionModel.RecipeQuery;
 import com.inhostudios.visionapitester.ImageInterpreter;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -21,6 +24,7 @@ import javax.swing.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 public class Display extends Application {
@@ -42,26 +46,30 @@ public class Display extends Application {
     private Camera camera;
     private Recipe selectedRecipe;
     private String url;
+    private RecipeQuery query;
+    private ArrayList<Recipe> recipes = new ArrayList<>();
+    private DataExtraction extracter = new DataExtraction();
+
+
     @FXML
     private WebView webView;
     @FXML
-    private ListView<String> listView = new ListView<String>();
+    private ListView<Object> listView = new ListView<Object>();
     private ObservableList<String> names = FXCollections.observableArrayList();
     @FXML
     private BorderPane listPane;
 
 
-
     @FXML
     private void camButton(ActionEvent event) {
         listView.getItems().addAll(ImageInterpreter.getOutputs(
-                System.getProperty("user.dir")+ "/src/main/resources/screenshot.jpg"));
+                System.getProperty("user.dir") + "/src/main/resources/screenshot.jpg"));
     }
 
-    public static Display waitForStartUp(){
-        try{
+    public static Display waitForStartUp() {
+        try {
             latch.wait();
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return displayTest;
@@ -76,16 +84,40 @@ public class Display extends Application {
         setDisplayTest(this);
     }
 
+
+    public void generateQuery() {
+        ObservableList<Object> results = listView.getSelectionModel().getSelectedItems();
+        String queryKeywords = "";
+        for (Object newName : results) {
+            queryKeywords += (", " + (String) newName);
+        }
+        query = new RecipeQuery(queryKeywords);
+    }
+
+    public void generateRecipes() {
+        if (query != null) {
+
+            RecipeManager rm = new RecipeManager(extracter.getEdamamRecipes(query.toURL()));
+            recipes = rm.getRecipeList();
+        }
+    }
+
+    public void displayRecipesOnListView() {
+        generateQuery();
+        generateRecipes();
+
+        if (recipes != null) {
+            for (Recipe r : recipes) {
+                listView.getItems().add(r);
+            }
+        }
+    }
+
     @FXML
     public void select() {//TODO: fix this pls
-        selectedRecipe = (Recipe) listView.getSelectionModel().getSelectedItem();
-
-        if (selectedRecipe != null) {
-            url = selectedRecipe.getUrlToRecipe();
-            System.out.println("You have selected this Recipe: " + selectedRecipe.toString());
-            return;
-        }
-        System.out.println("ERROR You have not chosen a Recipe");
+        displayRecipesOnListView();
+        selectedRecipe = (Recipe) listView.getSelectionModel().getSelectedItems().get(0);
+        System.out.println("You have selected this recipe: " + selectedRecipe.toString());
     }
 
     public void initCamera() {
@@ -126,13 +158,14 @@ public class Display extends Application {
             public void mouseClicked(MouseEvent e) {
                 int indices[] = accessList.getSelectedIndexes();
                 String srcterms = "";
-                for(int index : indices){
+                for (int index : indices) {
                     srcterms = srcterms + ", " + accessList.getItem(index);
                 }
                 updateSelection(srcterms);
 
             }
-            public void updateSelection(String str){
+
+            public void updateSelection(String str) {
                 searchTerms.setText(str);
             }
         });
