@@ -2,6 +2,7 @@ package com.inhostudios.visionapitester.GUI;
 
 import com.inhostudios.visionapitester.Camera.Camera;
 import com.inhostudios.visionapitester.DataExtraction;
+import com.inhostudios.visionapitester.DataExtractionModel.Recipe;
 import com.inhostudios.visionapitester.DataExtractionModel.RecipeManager;
 import com.inhostudios.visionapitester.DataExtractionModel.RecipeQuery;
 import javafx.application.Platform;
@@ -40,60 +41,73 @@ public class Controller implements Initializable {
     @FXML
     private Label status;
 
-    @FXML private CheckBox keyWordsBox;
-    @FXML private CheckBox dietRistrBox;
-    @FXML private CheckBox caloriesBox;
-    @FXML private CheckBox cookingTimeBox;
-    @FXML private CheckBox excludedItemBox;
+    @FXML
+    private CheckBox keyWordsBox;
+    @FXML
+    private CheckBox dietRistrBox;
+    @FXML
+    private CheckBox caloriesBox;
+    @FXML
+    private CheckBox cookingTimeBox;
+    @FXML
+    private CheckBox excludedItemBox;
 
 
     private RecipeQuery query;
+    private Recipe selectedRecipe;
     private String url;
+    private Camera cam;
 
 
     //this is where you run your initialization when the window first open
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // DUMMY LIST
-        ArrayList<String> guessedNames = new ArrayList<>();
-        guessedNames.add("fish");
-        guessedNames.add("tomato");
+        initCamera();
 
-        searchListView.getItems().addAll(guessedNames);
+
+        // DUMMY LIST, Populating List of Recgonized Food
+        ArrayList<String> dummyListFiller = new ArrayList<>();
+        dummyListFiller.add("fish");
+        dummyListFiller.add("tomato");
+        dummyListFiller.add("pasta");
+        dummyListFiller.add("coke");
+
+
+        searchListView.getItems().addAll(dummyListFiller);
         searchListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //allow list to select multiple songs
-        //initializing status bar
-        status.setText("Initialized");
+
+        status.setText("Initialized Camera. Press take Photo to capture Vocabulary");
 
 
 //        //allow searchTextField to update searchListView result
-        keyWordsSearchkeyWordsSearch.textProperty().addListener((v, oldValue, newValue) -> {
-            System.out.println(newValue);
-            handleSearchOnListView(oldValue, newValue);
-        });
+//        keyWordsSearchkeyWordsSearch.textProperty().addListener((v, oldValue, newValue) -> {
+//            System.out.println(newValue);
+//            handleSearchOnListView(oldValue, newValue);
+//        });
+//
+//        dietRistrTextbox.textProperty().addListener((v, oldValue, newValue) -> {
+//            System.out.println(newValue);
+//        });
+//
+//        caloriesTextbox.textProperty().addListener((v, oldValue, newValue) -> {
+//            System.out.println(newValue);
+//        });
+//
+//        cookingTimeTextBox.textProperty().addListener((v, oldValue, newValue) -> {
+//            System.out.println(newValue);
+//        });
+//
+//        excludedItemTextBox.textProperty().addListener((v, oldValue, newValue) -> {
+//            System.out.println(newValue);
+//        });
 
-        dietRistrTextbox.textProperty().addListener((v, oldValue, newValue) -> {
-            System.out.println(newValue);
-        });
-
-        caloriesTextbox.textProperty().addListener((v, oldValue, newValue) -> {
-            System.out.println(newValue);
-        });
-
-        cookingTimeTextBox.textProperty().addListener((v, oldValue, newValue) -> {
-            System.out.println(newValue);
-        });
-
-        excludedItemTextBox.textProperty().addListener((v, oldValue, newValue) -> {
-            System.out.println(newValue);
-        });
     }
 
-    // TODO: partially working
     public void initCamera() {
         new Thread() {
             @Override
             public void run() {
-                Camera cam = new Camera();
+                cam = new Camera();
                 cam.start();
                 System.out.println(cam.getOutputs().toString());
 
@@ -108,21 +122,20 @@ public class Controller implements Initializable {
         }.start();
     }
 
-    public void openWebpage() {
-        if (url == null) {
-            url = "https://www.google.com";
+    public void takePhotoBtnClicked(){
+        ArrayList<String> results = new ArrayList<>();
+        results.addAll(cam.getOutputs());
+
+        if (!results.isEmpty()){
+            searchListView.getItems().addAll(results);
         }
-        System.out.println(url);
-        WebEngine webEngine = webView.getEngine();
-        webEngine.load(url);
     }
 
-    public void SubmitQueryBtnClicked() {
-        status.setText("New Selections Made...");
+    public void SubmitRequestBtnClicked() {
+        status.setText("Submitting Query Right Now");
 
         String cameraKeyWords = "";
         query = new RecipeQuery("");
-
         List<Object> selectedItemFromSearchListView = searchListView.getSelectionModel().getSelectedItems();
         if (!selectedItemFromSearchListView.isEmpty()) {
             for (Object obj : selectedItemFromSearchListView) {
@@ -136,17 +149,43 @@ public class Controller implements Initializable {
         DataExtraction extracter = new DataExtraction();
         List<Object> recipeJsons = extracter.getEdamamRecipes(query.toURL());
 
-
         RecipeManager manager = new RecipeManager(recipeJsons);
-        System.out.println(manager.getRecipeList());
+        ArrayList<Recipe> availableRecipes = manager.getRecipeList();
+        System.out.println("Here are the available recipes " + availableRecipes);
 
-        handleOptions(keyWordsBox, dietRistrBox, caloriesBox, cookingTimeBox, excludedItemBox);
+        // Clear the List
+        ObservableList<Object> emptyList = FXCollections.observableArrayList();
+        searchListView.setItems(emptyList);
+
+        // Re-populate the list with recipes
+        searchListView.getItems().addAll(availableRecipes);
+        searchListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //allow list to select multiple songs
+
+
+//        handleOptions(keyWordsBox, dietRistrBox, caloriesBox, cookingTimeBox, excludedItemBox);
     }
-
 
     public void selectRecipeBtnClicked() {
-        url = "http://www.seriouseats.com/recipes/2011/04/fish-with-saffron-tomato-cous-cous-recipe.html";
+        selectedRecipe = (Recipe) searchListView.getSelectionModel().getSelectedItem();
+
+        if (selectedRecipe != null) {
+            url = selectedRecipe.getUrlToRecipe();
+            System.out.println("You have selected this Recipe: " + selectedRecipe.toString());
+            return;
+        }
+        System.out.println("ERROR You have not chosen a Recipe");
+
     }
+
+    public void openWebpage() {
+        if (url == null) {
+            url = "https://www.google.com";
+        }
+        System.out.println(selectedRecipe.getUrlToRecipe());
+        WebEngine webEngine = webView.getEngine();
+        webEngine.load(url);
+    }
+
 
     public void menuFileCloseClick() {
         Stage window = (Stage) menuBar.getScene().getWindow();
@@ -160,6 +199,7 @@ public class Controller implements Initializable {
 //        recipeManager.filter(dataBase, favoriteBox.isSelected(), hateBox.isSelected(),
 //                recentlyPlayedBox.isSelected(), lostSongBox.isSelected(), neverPlayedBox.isSelected(), allSongsBox.isSelected());
     }
+
 
     //save the database before exiting
     //being called in Main class
