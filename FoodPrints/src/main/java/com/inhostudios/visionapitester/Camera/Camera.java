@@ -1,14 +1,20 @@
 package com.inhostudios.visionapitester.Camera;
 
+import com.inhostudios.visionapitester.ImageInterpreter;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacv.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Camera extends JComponent implements Runnable{
 
@@ -19,12 +25,17 @@ public class Camera extends JComponent implements Runnable{
     private static boolean running = false;
     private static int frameWidth = 1280;
     private static int frameHeight = 720;
+    private BufferedImage screenshot;
+    private ImageInterpreter interpreter;
+
+    private String path = System.getProperty("user.dir") + "\\src\\main\\resources\\screenshot.jpg";
 
     // image grabbing object from open CV api
     private static OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
     private static BufferedImage bufImg;
 
     public Camera(){
+        interpreter = new ImageInterpreter(path);
         // setting camera size
         frame.setSize(frameWidth, frameHeight);
 
@@ -77,6 +88,7 @@ public class Camera extends JComponent implements Runnable{
                 //showing it on the screen if the image exists
                 // error might be happening here? if the image doesn't exist it might not show image, break, pass through and end the thread
                 if(cvimg != null){
+                    screenshot = IplImageToByteArray(img); // converting iplimage to bufferedimage
                     frame.showImage(converter.convert(img));
                 }
             } catch(Exception e){
@@ -109,6 +121,24 @@ public class Camera extends JComponent implements Runnable{
         running = false;
     }
 
+    // conversion helper for ipl images to byte arrays
+    public static BufferedImage IplImageToByteArray(opencv_core.IplImage src) {
+        OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
+        Java2DFrameConverter paintConverter = new Java2DFrameConverter();
+        Frame frame = grabberConverter.convert(src);
+        return paintConverter.getBufferedImage(frame,1);
+    }
+
+    // save image class
+    public void saveImage(BufferedImage bufferedImage){
+        File outputFile = new File(path);
+        try {
+            ImageIO.write(bufferedImage, "jpg", outputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // key binding object for key mapping
     private class KeyBinding extends AbstractAction {
 
@@ -124,8 +154,17 @@ public class Camera extends JComponent implements Runnable{
         public void actionPerformed(ActionEvent e)
         {
             String action = e.getActionCommand();
-            if (action.equals(Keys.ESCAPE.toString()) || action.equals(Keys.CTRLC.toString())) stop();
+            if (action.equals(Keys.ESCAPE.toString())) stop();
             else System.out.println("Key Binding: " + action);
+
+            // taking a screenshot
+            if(action.equals(Keys.CTRLC.toString())){
+                saveImage(screenshot);
+                ArrayList<String> estimates = interpreter.getOutputs();
+                for(String output : estimates){
+                    System.out.println(output);
+                }
+            }
         }
     }
 }
