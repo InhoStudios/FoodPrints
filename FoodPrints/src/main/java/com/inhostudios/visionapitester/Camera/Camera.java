@@ -60,6 +60,11 @@ public class Camera extends JComponent implements Runnable{
         {
             public void windowClosing(WindowEvent e)
             {
+                try {
+                    grabber.stop();
+                } catch (FrameGrabber.Exception e1) {
+                    e1.printStackTrace();
+                }
                 stop();
             }
         });
