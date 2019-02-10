@@ -1,4 +1,4 @@
-package GUI;
+package com.inhostudios.visionapitester.GUI;
 
 import com.inhostudios.visionapitester.Camera.Camera;
 import com.inhostudios.visionapitester.FoodPrints;
@@ -70,25 +70,25 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //initializing Camera
 
-        ImageInterpreter interpreter = new ImageInterpreter(FoodPrints.getDir()+"screenshot.jpg");
-        Camera cam = new Camera();
-        cam.start();
+//        ImageInterpreter interpreter = new ImageInterpreter(FoodPrints.getDir()+ "screenshot.jpg");
+//        Camera cam = new Camera();
+//        cam.start();
 
 //        ArrayList<String> guessedNames = cam.getOutput();
-        ArrayList<String> guessedNames = new ArrayList<>();
-        guessedNames.add("D");
-
-
-        searchListView.getItems().addAll(guessedNames);
-        searchListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //allow list to select multiple songs
-        //initializing status bar
-        status.setText("Starting the Camera");
-
-
-        //allow searchTextField to update searchListView result
-        searchTextField.textProperty().addListener((v, oldValue, newValue) -> {
-            handleSearchOnListView(oldValue, newValue);
-        });
+//        ArrayList<String> guessedNames = new ArrayList<>();
+//        guessedNames.add("D");
+//
+//
+//        searchListView.getItems().addAll(guessedNames);
+//        searchListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //allow list to select multiple songs
+//        //initializing status bar
+//        status.setText("Starting the Camera");
+//
+//
+//        //allow searchTextField to update searchListView result
+//        searchTextField.textProperty().addListener((v, oldValue, newValue) -> {
+//            handleSearchOnListView(oldValue, newValue);
+//        });
     }
 
     public void menuFileCloseClick() {

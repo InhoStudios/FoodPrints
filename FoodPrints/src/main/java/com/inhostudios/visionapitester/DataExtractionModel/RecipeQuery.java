@@ -13,7 +13,7 @@ public class RecipeQuery {
     private String diet = "";               // TESTED
     private String calories = "";           // TESTED
     private String time = "";               // TESTED
-    private String exluded = "";            // TESTED
+    private String excluded = "";           // TESTED
 
     public RecipeQuery(String keywords){
         String formattedString = keywords.replaceAll(" ", "%20");
@@ -43,8 +43,8 @@ public class RecipeQuery {
         this.time = "&time=" + min + "-" + max;
     }
 
-    public void setExluded(String excludeFood) {
-        this.exluded = "&excluded=" + excludeFood;
+    public void setExcluded(String excludeFood) {
+        this.excluded = "&excluded=" + excludeFood;
     }
 
     public String toURL() {
@@ -53,10 +53,7 @@ public class RecipeQuery {
 
 
         String result = "https://api.edamam.com/search?" + q + appID +
-                appKey + from + to + "&health=alcohol-free" + calories + time + exluded + diet;
-
-
-
+                appKey + from + to + "&health=alcohol-free" + calories + time + excluded + diet;
 
         return result;
     }
