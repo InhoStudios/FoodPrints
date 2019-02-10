@@ -13,11 +13,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 
+import javax.sound.midi.Soundbank;
 import javax.xml.soap.Text;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,16 +33,34 @@ import static com.inhostudios.visionapitester.FoodPrints.getDir;
 
 public class Controller implements Initializable {
 
-    @FXML private MenuBar menuBar;
-    @FXML private TextField keyWordsSearchkeyWordsSearch;
-    @FXML private TextField dietRistrTextbox;
-    @FXML private TextField caloriesTextbox;
-    @FXML private TextField cookingTimeTextBox;
-    @FXML private TextField excludedItemTextBox;
-    @FXML private WebView webView;
-    @FXML private ListView<Object> searchListView = new ListView<Object>();
-    @FXML private Label status;
-    @FXML private RecipeQuery query;
+    @FXML
+    private MenuBar menuBar;
+    @FXML
+    private TextField keyWordsSearchkeyWordsSearch;
+    @FXML
+    private TextField dietRistrTextbox;
+    @FXML
+    private TextField caloriesTextbox;
+    @FXML
+    private TextField cookingTimeTextBox;
+    @FXML
+    private TextField excludedItemTextBox;
+    @FXML
+    private WebView webView;
+    @FXML
+    private ListView<Object> searchListView = new ListView<Object>();
+    @FXML
+    private Label status;
+
+    @FXML private CheckBox keyWordsBox;
+    @FXML private CheckBox dietRistrBox;
+    @FXML private CheckBox caloriesBox;
+    @FXML private CheckBox cookingTimeBox;
+    @FXML private CheckBox excludedItemBox;
+
+
+    private RecipeQuery query;
+    private String url;
 
 
     //this is where you run your initialization when the window first open
@@ -99,21 +121,13 @@ public class Controller implements Initializable {
     }
 
     public void openWebpage() {
+        if (url == null) {
+            url = "https://www.google.com";
+        }
+        System.out.println(url);
         WebEngine webEngine = webView.getEngine();
-        webEngine.load("https://www.google.com");
+        webEngine.load(url);
     }
-
-    public void menuFileCloseClick() {
-        Stage window = (Stage) menuBar.getScene().getWindow();
-        System.out.println("Window Closed");
-        exitProcedure();
-        window.close();
-    }
-
-    public void playButtonClick() {
-//
-    }
-
 
     public void SubmitQueryBtnClicked() {
         status.setText("New Selections Made...");
@@ -124,7 +138,7 @@ public class Controller implements Initializable {
         List<Object> selectedItemFromSearchListView = searchListView.getSelectionModel().getSelectedItems();
         if (!selectedItemFromSearchListView.isEmpty()) {
             for (Object obj : selectedItemFromSearchListView) {
-                if (obj instanceof String){
+                if (obj instanceof String) {
                     cameraKeyWords += ("," + obj);
                 }
             }
@@ -133,16 +147,28 @@ public class Controller implements Initializable {
 
         DataExtraction extracter = new DataExtraction();
         List<Object> recipeJsons = extracter.getEdamamRecipes(query.toURL());
+
+
         RecipeManager manager = new RecipeManager(recipeJsons);
         System.out.println(manager.getRecipeList());
 
-//        handleOptions(favoriteBox, hateBox, recentlyPlayedBox, lostSongBox, neverPlayedBox, allSongsBox);
+        handleOptions(keyWordsBox, dietRistrBox, caloriesBox, cookingTimeBox, excludedItemBox);
+    }
+
+
+    public void selectRecipeBtnClicked() {
+        url = "http://www.seriouseats.com/recipes/2011/04/fish-with-saffron-tomato-cous-cous-recipe.html";
+    }
+
+    public void menuFileCloseClick() {
+        Stage window = (Stage) menuBar.getScene().getWindow();
+        System.out.println("Window Closed");
+        exitProcedure();
+        window.close();
     }
 
     //add filters on database base on the selected choiceBox
-    private void handleOptions(CheckBox favoriteBox, CheckBox hateBox, CheckBox recentlyPlayedBox, CheckBox
-            lostSongBox, CheckBox neverPlayedBox, CheckBox allSongsBox) {
-
+    private void handleOptions(CheckBox keyWordsBox, CheckBox dietRistrBox, CheckBox caloriesBox, CheckBox cookingTimeBox, CheckBox excludedItemBox) {
 //        recipeManager.filter(dataBase, favoriteBox.isSelected(), hateBox.isSelected(),
 //                recentlyPlayedBox.isSelected(), lostSongBox.isSelected(), neverPlayedBox.isSelected(), allSongsBox.isSelected());
     }

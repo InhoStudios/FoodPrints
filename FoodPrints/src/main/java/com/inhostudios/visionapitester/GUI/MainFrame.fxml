@@ -197,6 +197,11 @@
                         <Font name="Futura Bold" size="24.0" />
                      </font>
                   </Button>
+                  <Button fx:id="selectRecipeBtn" alignment="CENTER" mnemonicParsing="false" onAction="#selectRecipeBtnClicked" text="Submit Query">
+                     <font>
+                        <Font name="Futura Bold" size="24.0" />
+                     </font>
+                  </Button>
                         <Button fx:id="OpenWebpageBtn" alignment="CENTER" mnemonicParsing="false" onAction="#openWebpage" text="Open Webpage">
                             <font>
                                 <Font name="Futura Bold" size="24.0" />
