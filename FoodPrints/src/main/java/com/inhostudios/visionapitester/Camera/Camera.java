@@ -59,6 +59,7 @@ public class Camera extends JComponent implements Runnable{
         // starting the thread for the frame grabbing object
         try {
             grabber.start();
+            System.out.println("grabber started");
         } catch (FrameGrabber.Exception e) {
             e.printStackTrace();
         }
@@ -82,6 +83,7 @@ public class Camera extends JComponent implements Runnable{
                 e.printStackTrace();
             }
         }
+        System.out.println("Ending camera thread");
         // ending the grabber thread
         try {
             grabber.stop();
@@ -91,6 +93,7 @@ public class Camera extends JComponent implements Runnable{
         }
         // ending the frame thread
         frame.dispose();
+        System.out.println("Closing camera");
     }
 
     // starting the thread
