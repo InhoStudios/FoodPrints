@@ -1,9 +1,11 @@
 package com.inhostudios.visionapitester.GUI;
 
 
+import com.sun.javafx.sg.prism.NGNode;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Camera;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
@@ -20,17 +22,24 @@ public class Main extends Application {
     Controller controller;
     Parent root;
 
+
     @FXML
     private ListView<Any> searchListView; // could be either string or recipe
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+
+
         window = primaryStage;
 
-//      URL location = getClass().getResource("./PocketDoc/FoodPrints/src/main/java/com/inhostudios/visionapitester/GUI/MainFrame.fxml");
-//      System.out.println(location);
+        System.out.println(getClass());
+        System.out.println(getClass().getPackage());
 
-        // PATH HAS TO BE REAL PATH, NOT RELATIVE PATH
+//        URL location = getClass().getResource("apple.jpg");
+//        System.out.println(location);
+
+//        // PATH HAS TO BE REAL PATH, NOT RELATIVE PATH
         String path = "/Users/harrychuang/Developer/PocketDoc/FoodPrints/src/main/java/com/inhostudios/visionapitester/GUI/MainFrame.fxml";
         URL location = new File(path).toURI().toURL();
 
@@ -41,6 +50,8 @@ public class Main extends Application {
         window.setScene(new Scene(root, 1440, 900));
         window.show();
 
+
+
         // when use close the window, the database is updated with new records
         window.setOnCloseRequest(e -> {
             e.consume();
@@ -48,9 +59,17 @@ public class Main extends Application {
             controller.exitProcedure();
             window.close();
         });
+
+
+//        controller.initCamera();
+
     }
 
     public static void main(String[] args) {
+
+
+
+
         launch(args);
     }
 }

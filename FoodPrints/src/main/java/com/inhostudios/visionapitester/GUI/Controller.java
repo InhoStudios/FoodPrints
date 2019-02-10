@@ -1,14 +1,20 @@
 package com.inhostudios.visionapitester.GUI;
 
 import com.inhostudios.visionapitester.Camera.Camera;
+import com.inhostudios.visionapitester.DataExtraction;
+import com.inhostudios.visionapitester.DataExtractionModel.RecipeManager;
+import com.inhostudios.visionapitester.DataExtractionModel.RecipeQuery;
 import com.inhostudios.visionapitester.FoodPrints;
 import com.inhostudios.visionapitester.ImageInterpreter;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 
@@ -23,34 +29,25 @@ import static com.inhostudios.visionapitester.FoodPrints.getDir;
 
 public class Controller implements Initializable {
 
-//    private Playlist dataBase = new Playlist("database");
-//    private Playlist currentQueue = new Playlist("currentQueue");
-//    private PlaylistManager pm = new PlaylistManager();
-//    private MusicPlayer musicPlayer = MusicPlayer.getInstance();
-//    private boolean musicPlayerInitialized = false;
-
-    @FXML
-    private MenuBar menuBar;
-
-    @FXML
-    private TextField keyWordsSearchkeyWordsSearch;
-
-    @FXML
-    private ListView<Object> searchListView = new ListView<Object>();
-
-    @FXML
-    private Label status;
+    @FXML private MenuBar menuBar;
+    @FXML private TextField keyWordsSearchkeyWordsSearch;
+    @FXML private TextField dietRistrTextbox;
+    @FXML private TextField caloriesTextbox;
+    @FXML private TextField cookingTimeTextBox;
+    @FXML private TextField excludedItemTextBox;
+    @FXML private WebView webView;
+    @FXML private ListView<Object> searchListView = new ListView<Object>();
+    @FXML private Label status;
+    @FXML private RecipeQuery query;
 
 
     //this is where you run your initialization when the window first open
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         // DUMMY LIST
         ArrayList<String> guessedNames = new ArrayList<>();
         guessedNames.add("fish");
         guessedNames.add("tomato");
-
 
         searchListView.getItems().addAll(guessedNames);
         searchListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //allow list to select multiple songs
@@ -60,20 +57,50 @@ public class Controller implements Initializable {
 
 //        //allow searchTextField to update searchListView result
         keyWordsSearchkeyWordsSearch.textProperty().addListener((v, oldValue, newValue) -> {
-            System.out.println("Clicked!");
+            System.out.println(newValue);
             handleSearchOnListView(oldValue, newValue);
+        });
+
+        dietRistrTextbox.textProperty().addListener((v, oldValue, newValue) -> {
+            System.out.println(newValue);
+        });
+
+        caloriesTextbox.textProperty().addListener((v, oldValue, newValue) -> {
+            System.out.println(newValue);
+        });
+
+        cookingTimeTextBox.textProperty().addListener((v, oldValue, newValue) -> {
+            System.out.println(newValue);
+        });
+
+        excludedItemTextBox.textProperty().addListener((v, oldValue, newValue) -> {
+            System.out.println(newValue);
         });
     }
 
-    // TODO: notworking!
-    public void initCamera(){
-        //initializing Camera
+    // TODO: partially working
+    public void initCamera() {
+        new Thread() {
+            @Override
+            public void run() {
+                Camera cam = new Camera();
+                cam.start();
+                System.out.println(cam.getOutputs().toString());
 
-        ImageInterpreter interpreter = new ImageInterpreter(FoodPrints.getDir()+ "screenshot.jpg");
-        Camera cam = new Camera();
-        cam.start();
 
-        System.out.println(cam.getOutputs().toString());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+        }.start();
+    }
+
+    public void openWebpage() {
+        WebEngine webEngine = webView.getEngine();
+        webEngine.load("https://www.google.com");
     }
 
     public void menuFileCloseClick() {
@@ -84,58 +111,37 @@ public class Controller implements Initializable {
     }
 
     public void playButtonClick() {
-//        musicPlayer.setPlaylist(currentQueue);
 //
-//        status.setText("Play Button Clicked.");
-//
-//        if (musicPlayer.getPlaylist().getListOfSongs().isEmpty()) {
-//            status.setText("Current Queue is empty. Please select check box and hit submit button!");
-//            return;
-//        }
-//
-//
-//        if (!musicPlayerInitialized) {
-//            musicPlayer.initializeThreadAndPlay();
-//            musicPlayerInitialized = true;
-//        } else {
-//            musicPlayer.resume();
-//        }
     }
 
-    public void pauseButtonClick() {
-        status.setText("Pause Button Clicked.");
-//        musicPlayer.pause();
-    }
 
-    public void skipButtonClick() {
-        status.setText("Skip Button Clicked.");
-
-    }
-
-    public void stopButtonClick() {
-        status.setText("Stop Button Clicked");
-
-    }
-
-    public void submitButtonClick() {
+    public void SubmitQueryBtnClicked() {
         status.setText("New Selections Made...");
+
+        String cameraKeyWords = "";
+        query = new RecipeQuery("");
 
         List<Object> selectedItemFromSearchListView = searchListView.getSelectionModel().getSelectedItems();
         if (!selectedItemFromSearchListView.isEmpty()) {
-            //clearing out the current queue
-
-            for (Object any : selectedItemFromSearchListView) {
-                // do something to the list item
+            for (Object obj : selectedItemFromSearchListView) {
+                if (obj instanceof String){
+                    cameraKeyWords += ("," + obj);
+                }
             }
-
-            return;
+            query.setQ(cameraKeyWords);
         }
+
+        DataExtraction extracter = new DataExtraction();
+        List<Object> recipeJsons = extracter.getEdamamRecipes(query.toURL());
+        RecipeManager manager = new RecipeManager(recipeJsons);
+        System.out.println(manager.getRecipeList());
 
 //        handleOptions(favoriteBox, hateBox, recentlyPlayedBox, lostSongBox, neverPlayedBox, allSongsBox);
     }
 
     //add filters on database base on the selected choiceBox
-    private void handleOptions(CheckBox favoriteBox, CheckBox hateBox, CheckBox recentlyPlayedBox, CheckBox lostSongBox, CheckBox neverPlayedBox, CheckBox allSongsBox) {
+    private void handleOptions(CheckBox favoriteBox, CheckBox hateBox, CheckBox recentlyPlayedBox, CheckBox
+            lostSongBox, CheckBox neverPlayedBox, CheckBox allSongsBox) {
 
 //        recipeManager.filter(dataBase, favoriteBox.isSelected(), hateBox.isSelected(),
 //                recentlyPlayedBox.isSelected(), lostSongBox.isSelected(), neverPlayedBox.isSelected(), allSongsBox.isSelected());

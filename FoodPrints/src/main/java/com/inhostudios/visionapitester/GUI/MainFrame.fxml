@@ -86,7 +86,7 @@
                 </HBox>
                 <HBox prefHeight="500.0" prefWidth="200.0">
                     <children>
-                        <WebView minHeight="450.0" prefHeight="300.0" prefWidth="12000.0">
+                        <WebView fx:id="webView" minHeight="450.0" prefHeight="300.0" prefWidth="12000.0">
                             <HBox.margin>
                                 <Insets left="10.0" />
                             </HBox.margin>
@@ -192,12 +192,12 @@
                                 <Font name="Futura Bold" size="24.0" />
                             </font>
                         </Button>
-                  <Button fx:id="SubmitQueryBtn" alignment="CENTER" mnemonicParsing="false" onAction="#playButtonClick" text="Submit Query">
+                  <Button fx:id="SubmitQueryBtnClicked" alignment="CENTER" mnemonicParsing="false" onAction="#SubmitQueryBtnClicked" text="Submit Query">
                      <font>
                         <Font name="Futura Bold" size="24.0" />
                      </font>
                   </Button>
-                        <Button fx:id="OpenWebpageBtn" alignment="CENTER" mnemonicParsing="false" onAction="#playButtonClick" text="Open Webpage">
+                        <Button fx:id="OpenWebpageBtn" alignment="CENTER" mnemonicParsing="false" onAction="#openWebpage" text="Open Webpage">
                             <font>
                                 <Font name="Futura Bold" size="24.0" />
                             </font>
