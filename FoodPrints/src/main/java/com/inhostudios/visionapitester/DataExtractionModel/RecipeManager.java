@@ -1,12 +1,16 @@
 package com.inhostudios.visionapitester.DataExtractionModel;
 
+import com.inhostudios.visionapitester.DataExtraction;
+
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.ConsoleHandler;
 
 public class RecipeManager {
 
-    private ArrayList<Recipe> recipeList;
+    private ArrayList<Recipe> recipeList = new ArrayList<>();
 
     // need to pass through filter variables to the recipe manager in the constructor
     /*
@@ -16,8 +20,8 @@ public class RecipeManager {
     maxtime
     diettype (which is an enumerator)
      */
-    private Double minCals, maxCals = 1000000.0;
-    private Integer minTime, maxTime = 1000000;
+    private Double minCals = 0.0, maxCals = 1000000.0;
+    private Integer minTime = 0 , maxTime = 1000000;
     private String[] dietType;
     public RecipeManager(List<Object> recipeJsons){
         refreshRecipes(recipeJsons);
@@ -59,6 +63,18 @@ public class RecipeManager {
 
     public ArrayList<Recipe> getRecipeList(){
         return recipeList;
+    }
+
+    public static void main(String[] args) {
+        RecipeQuery query = new RecipeQuery("Chicken");
+        DataExtraction dataExtraction = new DataExtraction();
+        List <Object> results = dataExtraction.getEdamamRecipes(query.toURL());
+
+        RecipeManager recipeManager = new RecipeManager(results);
+
+
+
+
     }
 
 }
