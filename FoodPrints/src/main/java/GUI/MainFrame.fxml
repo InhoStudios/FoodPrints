@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: indianred;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controller">
+   <top>
+      <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="menuFileClose" mnemonicParsing="false" onAction="#menuFileCloseClick" text="Close" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <left>
+      <VBox spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox>
+               <children>
+                  <Region prefWidth="80.0" />
+                  <Label style="-fx-text-fill: white" text="Database">
+                     <padding>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                      <font>
+                          <Font name="Futura Bold" size="17.0" />
+                      </font>
+                  </Label>
+                  <Region prefWidth="80.0" />
+               </children>
+            </HBox>
+            <TextField fx:id="searchTextField" promptText="search here..." />
+            <ListView fx:id="songListView" minWidth="250.0" prefHeight="800.0" />
+         </children>
+         <padding>
+            <Insets left="4.0" right="4.0" top="8.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </VBox>
+   </left>
+   <bottom>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="statusLabel" text="Status:  " />
+            <Label fx:id="status" />
+         </children>
+         <padding>
+            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+         </padding>
+      </HBox>
+   </bottom>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="8.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="43.0" prefWidth="526.0" spacing="25.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label style="-fx-text-fill: white" text="Song Recommender">
+                      <font>
+                          <Font name="Futura Bold" size="24.0" />
+                      </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="250.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" spacing="20.0">
+                     <padding>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </padding>
+                     <children>
+                        <CheckBox fx:id="favoriteBox" mnemonicParsing="false" style="-fx-text-fill: white" text="Favorite" />
+                        <CheckBox fx:id="hateBox" mnemonicParsing="false" style="-fx-text-fill: white" text="Hate" />
+                        <CheckBox fx:id="recentlyPlayedBox" mnemonicParsing="false" style="-fx-text-fill: white" text="Recently Played" />
+                        <CheckBox fx:id="lostSongBox" mnemonicParsing="false" style="-fx-text-fill: white" text="Lost Songs" />
+                        <CheckBox fx:id="neverPlayedBox" mnemonicParsing="false" style="-fx-text-fill: white" text="Never Played" />
+                        <CheckBox fx:id="allSongsBox" mnemonicParsing="false" style="-fx-text-fill: white" text="All Songs" />
+                        <Button fx:id="submitButton" mnemonicParsing="false" onAction="#submitButtonClick" text="Submit" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            <Region prefHeight="30.0" />
+            <HBox alignment="CENTER" prefHeight="43.0" prefWidth="526.0" spacing="25.0">
+               <children>
+                  <Button fx:id="playButton" alignment="CENTER" mnemonicParsing="false" onAction="#playButtonClick" text="Play" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Futura Bold" size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="pauseButton" alignment="CENTER" mnemonicParsing="false" onAction="#pauseButtonClick" text="Pause" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Futura Bold" size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="skipButton" alignment="CENTER" mnemonicParsing="false" onAction="#skipButtonClick" text="Skip" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Futura Bold" size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="stopButton" alignment="CENTER" mnemonicParsing="false" onAction="#stopButtonClick" text="Stop" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Futura Bold" size="24.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+         </padding>
+      </VBox>
+   </center>
+</BorderPane>
