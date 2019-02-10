@@ -3,7 +3,6 @@ package com.inhostudios.visionapitester.DataExtractionModel;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.gson.JsonObject;
 import io.grpc.internal.JsonParser;
-import jdk.nashorn.internal.parser.JSONParser;
 
 import java.io.*;
 
