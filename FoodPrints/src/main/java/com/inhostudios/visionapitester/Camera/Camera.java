@@ -27,7 +27,7 @@ public class Camera extends JComponent implements Runnable{
     private BufferedImage screenshot;
     private ImageInterpreter interpreter;
 
-    private String path = System.getProperty("user.dir") + "\\src\\main\\resources\\screenshot.jpg";
+    private String path = System.getProperty("user.dir") + "/src/main/resources/screenshot.jpg";
 
     // image grabbing object from open CV api
     private static OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
@@ -179,10 +179,7 @@ public class Camera extends JComponent implements Runnable{
 //                }
 
                 saveImage(screenshot);
-                ArrayList<String> estimates = interpreter.getOutputs();
-                for(String output : estimates){
-                    System.out.println(output);
-                }
+                System.out.println("Saved Image");
             }
         }
     }
