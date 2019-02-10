@@ -13,9 +13,19 @@ public class ImageInterpreter {
 
     private static String output;
     private static ArrayList<String> outputs = new ArrayList<String>();
+    private static String fileName;
 
-    public ImageInterpreter(String fileName) throws Exception{
+    public ImageInterpreter(String fileName){
+        this.fileName = fileName;
 
+        try{
+            processImage(fileName);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void processImage(String fileName) throws Exception{
         // try image recognition
         try (ImageAnnotatorClient vision = ImageAnnotatorClient.create()) {
 
@@ -47,10 +57,22 @@ public class ImageInterpreter {
                 for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
                     annotation.getAllFields().forEach((k, v) ->
                             System.out.printf("%s : %s\n", k, v.toString()));
-                    outputs.add(annotation.getDescription());
+                    String output = annotation.getDescription();
+                    if(!output.toLowerCase().contains("food")) {
+                        outputs.add(annotation.getDescription());
+                    }
                 }
             }
         }
+    }
+
+    public ArrayList<String> getOutputs(String fileName){
+        try {
+            processImage(fileName);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return outputs;
     }
 
     public ArrayList<String> getOutputs(){
