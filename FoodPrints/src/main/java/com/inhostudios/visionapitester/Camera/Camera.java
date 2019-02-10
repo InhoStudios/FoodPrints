@@ -1,10 +1,7 @@
 package com.inhostudios.visionapitester.Camera;
 
 import org.bytedeco.javacpp.opencv_core;
-import org.bytedeco.javacv.CanvasFrame;
-import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.OpenCVFrameConverter;
-import org.bytedeco.javacv.OpenCVFrameGrabber;
+import org.bytedeco.javacv.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -51,25 +48,33 @@ public class Camera extends JComponent implements Runnable{
     }
 
     public void run(){
-        try{
-            grabber.setImageWidth(frameWidth);
-            grabber.setImageHeight(frameHeight);
+        try {
             grabber.start();
-            while(running){
-                final Frame cvimg = grabber.grab();
-                OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
-                opencv_core.IplImage img = converter.convert(cvimg);
-                if(cvimg != null){
-                    frame.showImage(converter.convert(img));
-                }
-            }
-            grabber.stop();
-            grabber.release();
-            frame.dispose();
-        } catch(Exception e){
+        } catch (FrameGrabber.Exception e) {
             e.printStackTrace();
         }
+        while(running){
+            try{
+                grabber.setImageWidth(frameWidth);
+                grabber.setImageHeight(frameHeight);
+                    final Frame cvimg = grabber.grab();
+                    OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
+                    opencv_core.IplImage img = converter.convert(cvimg);
+                    if(cvimg != null){
+                        frame.showImage(converter.convert(img));
 
+                }
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        try {
+            grabber.stop();
+            grabber.release();
+        } catch (FrameGrabber.Exception e) {
+            e.printStackTrace();
+        }
+        frame.dispose();
     }
     public void start()
     {
