@@ -17,12 +17,6 @@ public class ImageInterpreter {
 
     public ImageInterpreter(String fileName){
         this.fileName = fileName;
-
-        try{
-            processImage(fileName);
-        } catch(Exception e){
-            e.printStackTrace();
-        }
     }
 
     public void processImage(String fileName) throws Exception{
@@ -55,8 +49,8 @@ public class ImageInterpreter {
                 }
 
                 for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
-                    annotation.getAllFields().forEach((k, v) ->
-                            System.out.printf("%s : %s\n", k, v.toString()));
+//                    annotation.getAllFields().forEach((k, v) ->
+//                            System.out.printf("%s : %s\n", k, v.toString()));
                     String output = annotation.getDescription();
                     if(!output.toLowerCase().contains("food")) {
                         outputs.add(annotation.getDescription());
@@ -67,6 +61,7 @@ public class ImageInterpreter {
     }
 
     public ArrayList<String> getOutputs(String fileName){
+        outputs = new ArrayList<>();
         try {
             processImage(fileName);
         } catch (Exception e){
@@ -76,6 +71,12 @@ public class ImageInterpreter {
     }
 
     public ArrayList<String> getOutputs(){
+        outputs = new ArrayList<>();
+        try {
+            processImage(fileName);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return outputs;
     }
 
