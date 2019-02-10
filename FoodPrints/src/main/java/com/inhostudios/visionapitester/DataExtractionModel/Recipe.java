@@ -17,7 +17,7 @@ public class Recipe {
     private int cooktime;
     private String urlToRecipe;
     private int servings;
-    private String dietLabels;
+    private String[] dietLabels;
 
     public Recipe(Object jsonObj){
         String jsonString = jsonObj.toString();
@@ -43,7 +43,7 @@ public class Recipe {
         // servings
         JsonPrimitive SERVINGS = recipe.getAsJsonPrimitive("yield");
         // diet labels
-        JsonPrimitive DIETLABELS = recipe.getAsJsonArray("dietLabels").getAsJsonPrimitive();
+        JsonArray DIETLABELS = recipe.getAsJsonArray("dietLabels");
 
         calories = CALORIES.getAsDouble();
         fat = FAT.getAsDouble();
@@ -53,7 +53,9 @@ public class Recipe {
         cooktime = COOKTIME.getAsInt();
         urlToRecipe = URL.getAsString();
         servings = SERVINGS.getAsInt();
-        dietLabels = DIETLABELS.getAsString();
+        for(int i = 0; i < DIETLABELS.size(); i++){
+            dietLabels[i] = DIETLABELS.get(i).getAsString();
+        }
 
         System.out.println("Calories: " + calories + " Fat: " + fat + " URL: " + urlToRecipe);
 
@@ -150,7 +152,7 @@ public class Recipe {
         return servings;
     }
 
-    public String getDietLabels(){
+    public String[] getDietLabels(){
         return dietLabels;
     }
 }
