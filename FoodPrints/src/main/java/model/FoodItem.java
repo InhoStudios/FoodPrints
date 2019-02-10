@@ -1,5 +1,7 @@
 package model;
 
+import model.Nutrition.Nutrition;
+
 import java.util.HashMap;
 
 public class FoodItem {
